@@ -1,24 +1,42 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const darkModeToggle = document.getElementById('toggle-dark-mode');
+    const sections = document.querySelectorAll('section');
+    const navButtons = document.querySelectorAll('.nav-btn');
 
-const adminCredentials = {
-    username: "Nitish",
-    password: "Pawanyadav@9529"
-};
+    // Toggle Dark Mode
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
 
-function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    // Navigation
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            sections.forEach(section => section.classList.add('hidden'));
+            document.getElementById(button.dataset.section).classList.remove('hidden');
+        });
+    });
 
-    if (username === adminCredentials.username && password === adminCredentials.password) {
-        alert("Admin logged in successfully!");
-        // Redirect or load admin dashboard
-    } else {
-        alert("Invalid credentials!");
+    // Milk Records
+    const milkForm = document.getElementById('milk-form');
+    const recordList = document.getElementById('record-list');
+    const records = JSON.parse(localStorage.getItem('milkRecords')) || [];
+
+    milkForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const name = document.getElementById('supplier-name').value;
+        const amount = parseFloat(document.getElementById('milk-amount').value);
+        const price = parseFloat(document.getElementById('milk-price').value);
+
+        records.push({ name, amount, price, date: new Date().toLocaleDateString() });
+        localStorage.setItem('milkRecords', JSON.stringify(records));
+        updateRecords();
+    });
+
+    function updateRecords() {
+        recordList.innerHTML = records.map(record => `
+            <li>${record.date} - ${record.name}: ${record.amount} liters - ₹${record.price}</li>
+        `).join('');
     }
-}
 
-window.onload = () => {
-    setTimeout(() => {
-        document.querySelector(".splash-screen").style.display = "none";
-        document.querySelector(".login-container").classList.add("show-login");
-    }, 4000);
-};
+    updateRecords();
+});
