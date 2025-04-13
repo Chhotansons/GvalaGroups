@@ -1,5 +1,4 @@
-
-<html lang="en"><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,25 +17,25 @@
         <p id="login-error" style="color: red; display: none;">Invalid Username or Password</p>
     </div>
     <script>
+        // Login Validation
         document.getElementById('login-form').addEventListener('submit', function (event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            if (username === "Nitish" && password === "Pawanyadav@9") {
-                localStorage.setItem("isLoggedIn", true);
-                window.location.href = "index.html";
+            // Admin credentials
+            if (username === "Nitish" && password === "Paanyadav@9") {
+                window.location.href = "index.html"; // Redirect to dashboard
             } else {
-                document.getElementById('login-error').style.display = "block";
+                const error = document.getElementById('login-error');
+                error.style.display = "block";
             }
         });
-
-        if (localStorage.getItem("isLoggedIn")) {
-            window.location.href = "index.html";
-        }
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,86 +43,58 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="login-section">
-        <div class="login-container">
-            <h1>Welcome to Gvala App</h1>
-            <form id="login-form">
-                <input type="text" id="username" placeholder="Enter Admin Name" required>
-                <input type="password" id="password" placeholder="Enter Password" required>
-                <button type="submit">Login</button>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h1 class="gvala-title">Gvala</h1>
+            <h2 class="gvala-group">Group</h2>
+            <button id="toggle-profile" class="toggle-btn">Profile</button>
+        </div>
+
+        <!-- Profile Section (Hidden by Default) -->
+        <div class="profile-section hidden" id="profile-section">
+            <div class="profile-avatar">
+                <img id="profile-photo" src="default-avatar.png" alt="Profile Photo">
+                <label for="upload-avatar" class="upload-btn">📷</label>
+                <input type="file" id="upload-avatar" accept="image/*" style="display: none;">
+            </div>
+            <h3>Profile</h3>
+            <p><strong>Name:</strong> <span id="supplier-name-display">John Doe</span></p>
+            <p><strong>Total Milk Delivered:</strong> <span id="total-milk-delivered">0 liters</span></p>
+            <p><strong>Absent Days:</strong> <span id="absent-days-count">0 days</span></p>
+            <button id="view-delivery-history">View Delivery History</button>
+            <button id="change-password">Change Password</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <form id="milk-form">
+                <h2>Add Milk Record</h2>
+                <input type="text" id="supplier-name" placeholder="Supplier Name" required>
+                <input type="number" id="milk-amount" placeholder="Milk (liters)" required>
+                <button type="submit">Add Record</button>
             </form>
-            <p id="login-error" style="color: red; display: none;">Invalid Username or Password</p>
+
+            <div id="calendar-section">
+                <h2>Attendance Calendar</h2>
+                <div id="calendar"></div>
+            </div>
+
+            <div id="daily-log">
+                <h2>Daily Milk Log</h2>
+                <ul id="log-list"></ul>
+            </div>
+
+            <div id="daily-report">
+                <h2>Daily Report</h2>
+                <p id="total-milk">Total Milk Collected: 0 liters</p>
+                <p><strong>Suppliers Who Delivered:</strong></p>
+                <ul id="delivered-list"></ul>
+                <p><strong>Suppliers Who Skipped:</strong></p>
+                <ul id="skipped-list"></ul>
+            </div>
         </div>
     </div>
-
-    <div id="app-section" style="display: none;">
-        <div class="container">
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <h1>Gvala App</h1>
-                <button id="toggle-dark-mode">Dark Mode</button>
-                <ul>
-                    <li><button class="nav-btn" data-section="dashboard">Dashboard</button></li>
-                    <li><button class="nav-btn" data-section="milk-records">Milk Records</button></li>
-                    <li><button class="nav-btn" data-section="suppliers">Suppliers</button></li>
-                    <li><button class="nav-btn" data-section="payments">Payments</button></li>
-                    <li><button class="nav-btn" data-section="attendance">Attendance</button></li>
-                    <li><button class="nav-btn" data-section="analytics">Analytics</button></li>
-                </ul>
-            </aside>
-
-            <!-- Main Content -->
-            <main>
-                <section id="dashboard" class="hidden">
-                    <h2>Daily Summary</h2>
-                    <p>Total Milk Collected: <span id="total-milk">0 liters</span></p>
-                    <p>Total Revenue: ₹<span id="total-revenue">0</span></p>
-                </section>
-
-                <section id="milk-records" class="hidden">
-                    <h2>Milk Records</h2>
-                    <form id="milk-form">
-                        <input type="text" id="supplier-name" placeholder="Supplier Name" required>
-                        <input type="number" id="milk-amount" placeholder="Milk Quantity (liters)" required>
-                        <input type="number" id="milk-price" placeholder="Price (₹)" required>
-                        <button type="submit">Add Record</button>
-                    </form>
-                    <div id="records">
-                        <h3>Milk Records</h3>
-                        <ul id="record-list"></ul>
-                    </div>
-                </section>
-
-                <section id="suppliers" class="hidden">
-                    <h2>Supplier Profiles</h2>
-                    <form id="supplier-form">
-                        <input type="text" id="supplier-name-input" placeholder="Supplier Name" required>
-                        <input type="text" id="supplier-contact" placeholder="Contact Info" required>
-                        <button type="submit">Add Supplier</button>
-                    </form>
-                    <ul id="supplier-list"></ul>
-                </section>
-
-                <section id="payments" class="hidden">
-                    <h2>Payments</h2>
-                    <ul id="payment-list"></ul>
-                </section>
-
-                <section id="attendance" class="hidden">
-                    <h2>Attendance</h2>
-                    <p>Track which suppliers delivered milk today.</p>
-                    <ul id="attendance-list"></ul>
-                </section>
-
-                <section id="analytics" class="hidden">
-                    <h2>Analytics</h2>
-                    <canvas id="milk-chart"></canvas>
-                </section>
-            </main>
-        </div>
-    </div>
-
     <script src="app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
