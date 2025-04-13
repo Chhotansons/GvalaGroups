@@ -1,5 +1,42 @@
-<!DOCTYPE html>
+
+<html lang="en"><!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gvala App - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Welcome to Gvala App</h1>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Enter Admin Name" required>
+            <input type="password" id="password" placeholder="Enter Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="login-error" style="color: red; display: none;">Invalid Username or Password</p>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === "Nitish" && password === "Pawanyadav@9") {
+                localStorage.setItem("isLoggedIn", true);
+                window.location.href = "index.html";
+            } else {
+                document.getElementById('login-error').style.display = "block";
+            }
+        });
+
+        if (localStorage.getItem("isLoggedIn")) {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
