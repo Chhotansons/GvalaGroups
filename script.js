@@ -1,42 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const darkModeToggle = document.getElementById('toggle-dark-mode');
-    const sections = document.querySelectorAll('section');
-    const navButtons = document.querySelectorAll('.nav-btn');
+    const toggleProfileButton = document.getElementById('toggle-profile');
+    const profileSection = document.getElementById('profile-section');
 
-    // Toggle Dark Mode
-    darkModeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
+    // Toggle Profile Section visibility
+    toggleProfileButton.addEventListener('click', () => {
+        profileSection.classList.toggle('visible'); // Add or remove 'visible' class
     });
 
-    // Navigation
-    navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            sections.forEach(section => section.classList.add('hidden'));
-            document.getElementById(button.dataset.section).classList.remove('hidden');
-        });
-    });
+    const profilePhoto = document.getElementById('profile-photo');
+    const uploadAvatar = document.getElementById('upload-avatar');
 
-    // Milk Records
-    const milkForm = document.getElementById('milk-form');
-    const recordList = document.getElementById('record-list');
-    const records = JSON.parse(localStorage.getItem('milkRecords')) || [];
-
-    milkForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const name = document.getElementById('supplier-name').value;
-        const amount = parseFloat(document.getElementById('milk-amount').value);
-        const price = parseFloat(document.getElementById('milk-price').value);
-
-        records.push({ name, amount, price, date: new Date().toLocaleDateString() });
-        localStorage.setItem('milkRecords', JSON.stringify(records));
-        updateRecords();
-    });
-
-    function updateRecords() {
-        recordList.innerHTML = records.map(record => `
-            <li>${record.date} - ${record.name}: ${record.amount} liters - ₹${record.price}</li>
-        `).join('');
+    // Load profile photo from localStorage
+    const savedPhoto = localStorage.getItem('profilePhoto');
+    if (savedPhoto) {
+        profilePhoto.src = savedPhoto;
     }
 
-    updateRecords();
+    // Handle avatar upload
+    uploadAvatar.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                profilePhoto.src = e.target.result;
+
+                // Save photo to localStorage
+                localStorage.setItem('profilePhoto', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 });
