@@ -1,100 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gvala App - Login</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gvala Group - Milk App</title>
+<style>
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: #f0f4ff;
+margin: 0;
+padding: 20px;
+}
+h1 {
+text-align: center;
+color: #1e90ff;
+}
+.fade-screen {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+background-color: #1e90ff;
+color: white;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+font-size: 2em;
+font-weight: bold;
+animation: fadeInOut 3s ease-in-out forwards;
+z-index: 9999;
+}
+.fade-screen span {
+font-size: 0.6em;
+font-weight: normal;
+}
+@keyframes fadeInOut {
+0% { opacity: 0; }
+20% { opacity: 1; }
+80% { opacity: 1; }
+100% { opacity: 0; visibility: hidden; }
+}
+.container {
+max-width: 600px;
+margin: auto;
+background: #fff;
+padding: 20px;
+border-radius: 12px;
+box-shadow: 0 0 15px rgba(0,0,0,0.1);
+margin-top: 20px;
+}
+input, select, button {
+width: 100%;
+padding: 10px;
+margin: 8px 0;
+border-radius: 8px;
+border: 1px solid #ccc;
+}
+button {
+background-color: #1e90ff;
+color: white;
+font-weight: bold;
+cursor: pointer;
+}
+.status-btn {
+width: 48%;
+margin-right: 2%;
+}
+.card {
+background: #f9f9f9;
+padding: 15px;
+margin: 10px 0;
+border-radius: 10px;
+box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+.report {
+background: #e0f7ff;
+padding: 15px;
+margin-top: 10px;
+border-radius: 10px;
+}
+.summary {
+background: #fff8dc;
+padding: 10px;
+border-radius: 10px;
+margin-bottom: 10px;
+box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+.bar {
+height: 20px;
+background-color: #1e90ff;
+margin: 4px 0;
+color: white;
+text-align: right;
+padding-right: 5px;
+border-radius: 5px;
+}
+.dark-mode {
+background-color: #111;
+color: white;
+}
+</style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Welcome to Gvala App</h1>
-        <form id="login-form">
-            <input type="text" id="username" placeholder="Enter Admin Name" required>
-            <input type="password" id="password" placeholder="Enter Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p id="login-error" style="color: red; display: none;">Invalid Username or Password</p>
-    </div>
-    <script>
-        // Login Validation
-        document.getElementById('login-form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+<div class="fade-screen">Gvala Group<br><span>Owned By Nitishyadav</span></div>
 
-            // Admin credentials
-            if (username === "Nitish" && password === "Pawanyadav@9") {
-                window.location.href = "index.html"; // Redirect to dashboard
-            } else {
-                const error = document.getElementById('login-error');
-                error.style.display = "block";
-            }
-        });
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gvala App</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <h1 class="gvala-title">Gvala</h1>
-            <h2 class="gvala-group">Group</h2>
-            <button id="toggle-profile" class="toggle-btn">Profile</button>
-        </div>
+<h1>Gvala Group - Supplier Management</h1>
+<div class="container summary" id="summary"></div>
 
-        <!-- Profile Section (Hidden by Default) -->
-        <div class="profile-section hidden" id="profile-section">
-            <div class="profile-avatar">
-                <img id="profile-photo" src="default-avatar.png" alt="Profile Photo">
-                <label for="upload-avatar" class="upload-btn">📷</label>
-                <input type="file" id="upload-avatar" accept="image/*" style="display: none;">
-            </div>
-            <h3>Profile</h3>
-            <p><strong>Name:</strong> <span id="supplier-name-display">John Doe</span></p>
-            <p><strong>Total Milk Delivered:</strong> <span id="total-milk-delivered">0 liters</span></p>
-            <p><strong>Absent Days:</strong> <span id="absent-days-count">0 days</span></p>
-            <button id="view-delivery-history">View Delivery History</button>
-            <button id="change-password">Change Password</button>
-        </div>
+<div class="container">
+<h2>Add New Supplier</h2>
+<input type="text" id="name" placeholder="Supplier Name">
+<input type="number" id="milk" placeholder="Milk Amount (Ltr)">
+<input type="number" id="price" placeholder="Price per Litre">
+<input type="date" id="date">
+<input type="text" id="phone" placeholder="Phone Number">
+<select id="shift">
+<option value="Morning">Morning</option>
+<option value="Evening">Evening</option>
+</select>
+<div>
+<button class="status-btn" onclick="setStatus('Delivered')" style="background:#1e90ff;color:white;">Delivered</button>
+<button class="status-btn" onclick="setStatus('Cash Out')" style="background:#28a745;color:white;">Cash Out</button>
+</div>
+<button onclick="addSupplier()">Save Supplier</button>
+</div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <form id="milk-form">
-                <h2>Add Milk Record</h2>
-                <input type="text" id="supplier-name" placeholder="Supplier Name" required>
-                <input type="number" id="milk-amount" placeholder="Milk (liters)" required>
-                <button type="submit">Add Record</button>
-            </form>
+<div class="container">
+<h2>Filter by Shift</h2>
+<select onchange="filterByShift(this.value)">
+<option value="All">All</option>
+<option value="Morning">Morning</option>
+<option value="Evening">Evening</option>
+</select>
+<h2>Search Supplier</h2>
+<input type="text" oninput="searchSupplier(this.value)" placeholder="Search by name or date...">
+<div id="supplierList"></div>
+</div>
 
-            <div id="calendar-section">
-                <h2>Attendance Calendar</h2>
-                <div id="calendar"></div>
-            </div>
+<div class="container">
+<h2>Monthly Report</h2>
+<input type="month" id="reportMonth" onchange="generateReport()">
+<div id="monthlyReport" class="report"></div>
+<div id="milkGraph"></div>
+</div>
 
-            <div id="daily-log">
-                <h2>Daily Milk Log</h2>
-                <ul id="log-list"></ul>
-            </div>
+<div class="container">
+<label><input type="checkbox" onchange="toggleDarkMode(this.checked)"> Dark Mode</label>
+</div>
 
-            <div id="daily-report">
-                <h2>Daily Report</h2>
-                <p id="total-milk">Total Milk Collected: 0 liters</p>
-                <p><strong>Suppliers Who Delivered:</strong></p>
-                <ul id="delivered-list"></ul>
-                <p><strong>Suppliers Who Skipped:</strong></p>
-                <ul id="skipped-list"></ul>
-            </div>
-        </div>
-    </div>
-    <script src="app.js"></script>
+<script>
+let currentStatus = '';
+
+function setStatus(status) {
+currentStatus = status;
+}
+
+function addSupplier() {
+const name = document.getElementById("name").value;
+const milk = parseFloat(document.getElementById("milk").value);
+const price = parseFloat(document.getElementById("price").value);
+const date = document.getElementById("date").value;
+const phone = document.getElementById("phone").value;
+const shift = document.getElementById("shift").value;
+
+if (!name || isNaN(milk) || isNaN(price) || !date || !phone || !currentStatus) {
+alert("Please fill all fields and select status (Delivered / Cash Out)");
+return;
+}
+
+const amount = milk * price;
+
+const supplierData = {
+name,
+milk,
+price,
+date,
+phone,
+shift,
+status: currentStatus,
+amount
+};
+
+let suppliers = JSON.parse(localStorage.getItem("suppliers")) || [];
+suppliers.push(supplierData);
+localStorage.setItem("suppliers", JSON.stringify(suppliers));
+
+document.getElementById("name").value = '';
+document.getElementById("milk").value = '';
+document.getElementById("price").value = '';
+document.getElementById("date").value = '';
+document.getElementById("phone").value = '';
+document.getElementById("shift").value = 'Morning';
+currentStatus = '';
+
+displaySuppliers();
+generateReport();
+updateSummary();
+}
+
+function displaySuppliers(filtered = null) {
+const list = document.getElementById("supplierList");
+list.innerHTML = '';
+let suppliers = JSON.parse(localStorage.getItem("suppliers")) || [];
+if (filtered) suppliers = suppliers.filter(filtered);
+
+if (suppliers.length === 0) {
+list.innerHTML = '<p>No suppliers found.</p>';
+return;
+}
+
+suppliers.forEach((s) => {
+list.innerHTML += `
+<div class="card">
+<b>${s.name}</b> (${s.date})<br/>
+Milk: ${s.milk} Ltr | ₹${s.price}/Ltr<br/>
+Phone: ${s.phone}<br/>
+Status: ${s.status} | Shift: ${s.shift}<br/>
+Total: ₹${s.amount.toFixed(2)}
+</div>
+`;
+});
+}
+
+function generateReport() {
+const monthInput = document.getElementById("reportMonth").value;
+const suppliers = JSON.parse(localStorage.getItem("suppliers")) || [];
+const reportDiv = document.getElementById("monthlyReport");
+const graphDiv = document.getElementById("milkGraph");
+if (!monthInput) return reportDiv.innerHTML = '';
+
+const selectedMonth = new Date(monthInput);
+let totalMilk = 0, totalAmount = 0, totalDelivered = 0, totalCashOut = 0;
+let dayMap = {};
+
+suppliers.forEach(s => {
+const entryDate = new Date(s.date);
+if (
+entryDate.getMonth() === selectedMonth.getMonth() &&
+entryDate.getFullYear() === selectedMonth.getFullYear()
+) {
+totalMilk += s.milk;
+totalAmount += s.amount;
+if (s.status === 'Delivered') totalDelivered += s.amount;
+if (s.status === 'Cash Out') totalCashOut += s.amount;
+
+const day = entryDate.getDate();
+dayMap[day] = (dayMap[day] || 0) + s.milk;
+}
+});
+
+reportDiv.innerHTML = `
+<b>Total Milk:</b> ${totalMilk.toFixed(2)} Ltr<br/>
+<b>Total Value:</b> ₹${totalAmount.toFixed(2)}<br/>
+<b>Delivered:</b> ₹${totalDelivered.toFixed(2)}<br/>
+<b>Cash Out:</b> ₹${totalCashOut.toFixed(2)}<br/>
+`;
+
+graphDiv.innerHTML = '<h3>Daily Milk Graph</h3>';
+for (let day in dayMap) {
+const width = dayMap[day] * 10;
+graphDiv.innerHTML += `<div class="bar" style="width:${width}px">${dayMap[day]}L - Day ${day}</div>`;
+}
+}
+
+function filterByShift(shift) {
+if (shift === 'All') displaySuppliers();
+else displaySuppliers(s => s.shift === shift);
+}
+
+function searchSupplier(query) {
+query = query.toLowerCase();
+displaySuppliers(s => s.name.toLowerCase().includes(query) || s.date.includes(query));
+}
+
+function updateSummary() {
+const suppliers = JSON.parse(localStorage.getItem("suppliers")) || [];
+const today = new Date().toISOString().slice(0,10);
+let totalMilk = 0, totalAmount = 0, count = 0;
+
+suppliers.forEach(s => {
+if (s.date === today) {
+totalMilk += s.milk;
+totalAmount += s.amount;
+count++;
+}
+});
+
+document.getElementById("summary").innerHTML = `
+<b>Today’s Milk:</b> ${totalMilk.toFixed(2)} Ltr |
+<b>Total Earned:</b> ₹${totalAmount.toFixed(2)} |
+<b>Suppliers:</b> ${count}
+`;
+}
+
+function toggleDarkMode(checked) {
+document.body.classList.toggle("dark-mode", checked);
+}
+
+window.onload = () => {
+displaySuppliers();
+generateReport();
+updateSummary();
+};
+</script>
 </body>
 </html>
